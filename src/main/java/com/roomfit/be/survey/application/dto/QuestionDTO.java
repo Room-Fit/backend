@@ -59,6 +59,18 @@ public class QuestionDTO {
                     )
                     .build();
         }
+        public static Response ofWithReplies(Question question){
+            return Response.builder()
+                    .id(question.getId())
+                    .title(question.getTitle())
+                    .type(question.getType().name())
+                    .optionDelimiter(question.getOptionDelimiter())
+                    .options(question.getReplies().stream()
+                            .map(OptionDTO.Response::of)
+                            .toList()
+                    )
+                    .build();
+        }
     }
 
 }

@@ -41,5 +41,19 @@ public class QuestionnaireDTO {
                     .build();
 
         }
+        public static Response ofWithReplies(Questionnaire questionnaire) {
+            return Response.builder()
+                    .id(questionnaire.getId())
+                    .title(questionnaire.getTitle())
+                    .description(questionnaire.getDescription())
+                    .questions(
+                            questionnaire.getQuestions()
+                                    .stream()
+                                    .map(QuestionDTO.Response::ofWithReplies)
+                                    .toList()
+                    )
+                    .build();
+
+        }
     }
 }

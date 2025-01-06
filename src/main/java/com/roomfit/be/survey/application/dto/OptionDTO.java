@@ -1,6 +1,7 @@
 package com.roomfit.be.survey.application.dto;
 
 import com.roomfit.be.survey.domain.Option;
+import com.roomfit.be.survey.domain.Reply;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,10 @@ public class OptionDTO {
         public Option toEntity(){
             return new Option(label, value);
         }
+        public Reply toReplyEntity(){
+            return new Reply(label, value);
+        }
+
     }
     @Data
     @Builder
@@ -32,6 +37,12 @@ public class OptionDTO {
                     .value(option.getValue())
                     .build();
         }
-
+        public static Response of(Reply reply){
+            return Response.builder()
+                    .id(reply.getId())
+                    .label(reply.getLabel())
+                    .value(reply.getValue())
+                    .build();
+        }
     }
 }
