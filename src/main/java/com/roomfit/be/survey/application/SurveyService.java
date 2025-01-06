@@ -2,16 +2,16 @@ package com.roomfit.be.survey.application;
 
 
 import com.roomfit.be.survey.application.dto.QuestionnaireDTO;
-import com.roomfit.be.survey.application.dto.SurveyReplyDTO;
+import com.roomfit.be.survey.application.dto.ReplyDTO;
 
 public interface SurveyService {
     QuestionnaireDTO.Response createQuestionnaire(QuestionnaireDTO.Create request);
 
     QuestionnaireDTO.Response createQuestionnaireLegacy(QuestionnaireDTO.Create request);
 
-    SurveyReplyDTO.QuestionReply createReply(SurveyReplyDTO.CreateReply request);
+    QuestionnaireDTO.Response createReply(ReplyDTO.Create request);
 
     QuestionnaireDTO.Response readLatestQuestionnaire();
 
-    SurveyReplyDTO.QuestionReply readReplyByUserId(Long id);
+    QuestionnaireDTO.Response readReplyByUserId(Long id);
 }

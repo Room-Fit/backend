@@ -2,11 +2,12 @@ package com.roomfit.be.survey.application;
 
 import com.roomfit.be.survey.application.dto.QuestionDTO;
 import com.roomfit.be.survey.application.dto.QuestionnaireDTO;
-import com.roomfit.be.survey.application.dto.SurveyReplyDTO;
+import com.roomfit.be.survey.application.dto.ReplyDTO;
 import com.roomfit.be.survey.application.exception.QuestionnaireNotFoundException;
 import com.roomfit.be.survey.domain.Question;
 import com.roomfit.be.survey.domain.Questionnaire;
 import com.roomfit.be.survey.infrastructure.SurveyRepository;
+import com.roomfit.be.survey.infrastructure.support.ReplyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +34,23 @@ public class SurveyServiceImpl implements  SurveyService{
                 convertToQuestions(request.getQuestions())
         );
 
-        surveyRepository.saveQuestionnaire(questionnaire);
+        surveyRepository.saveBulk(questionnaire);
         return readLatestQuestionnaire();
+    }
+
+    @Override
+    public QuestionnaireDTO.Response readLatestQuestionnaire() {
+        Questionnaire foundQuestionnaire = surveyRepository.findTopByOrderByCreatedAtDesc()
+                .orElseThrow(()-> new QuestionnaireNotFoundException("ERROR"));
+
+        return QuestionnaireDTO.Response.of(foundQuestionnaire);
+    }
+    @Transactional
+    public QuestionnaireDTO.Response readLatestQuestionnaireWithReplies() {
+        Questionnaire foundQuestionnaire = surveyRepository.findTopByOrderByCreatedAtDesc()
+                .orElseThrow(()-> new QuestionnaireNotFoundException("ERROR"));
+
+        return QuestionnaireDTO.Response.ofWithReplies(foundQuestionnaire);
     }
 
     @Transactional
@@ -49,22 +65,20 @@ public class SurveyServiceImpl implements  SurveyService{
         return QuestionnaireDTO.Response.of(surveyRepository.save(questionnaire));
     }
 
+    @Transactional
     @Override
-    public QuestionnaireDTO.Response readLatestQuestionnaire() {
-        Questionnaire foundQuestionnaire = surveyRepository.findTopByOrderByCreatedAtDesc()
-                .orElseThrow(()-> new QuestionnaireNotFoundException("ERROR"));
-
-        return QuestionnaireDTO.Response.of(foundQuestionnaire);
+    public QuestionnaireDTO.Response createReply(ReplyDTO.Create request) {
+        surveyRepository.saveBulkReply(request);
+        return readLatestQuestionnaireWithReplies();
     }
 
+    /**
+     * TODO: 로그인 들어가면, user의 id 에 따라 수정
+     */
     @Override
-    public SurveyReplyDTO.QuestionReply createReply(SurveyReplyDTO.CreateReply request) {
-        return null;
-    }
-
-    @Override
-    public SurveyReplyDTO.QuestionReply readReplyByUserId(Long id) {
-        return null;
+    public QuestionnaireDTO.Response readReplyByUserId(Long id) {
+        Questionnaire foundQuestionnaire = surveyRepository.findAll().get(0);
+        return QuestionnaireDTO.Response.ofWithReplies(foundQuestionnaire);
     }
 
     private List<Question> convertToQuestions(List<QuestionDTO.Request> questions) {
