@@ -20,7 +20,7 @@ public class QuestionnaireRepositoryImpl implements QuestionnaireRepository {
 
     @Transactional
     @Override
-    public void saveQuestionnaire(Questionnaire questionnaire) {
+    public void saveBulk(Questionnaire questionnaire) {
         if (questionnaire.getCreatedAt() == null) {
             questionnaire.setCreatedAt(LocalDateTime.now());
         }

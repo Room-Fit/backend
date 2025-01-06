@@ -2,7 +2,7 @@ package com.roomfit.be.survey.presentation;
 
 import com.roomfit.be.survey.application.SurveyService;
 import com.roomfit.be.survey.application.dto.QuestionnaireDTO;
-import com.roomfit.be.survey.application.dto.SurveyReplyDTO;
+import com.roomfit.be.survey.application.dto.ReplyDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +21,11 @@ public class SurveyController {
         return surveyService.readLatestQuestionnaire();
     }
     @PostMapping("/reply")
-    SurveyReplyDTO.QuestionReply createReply(@RequestBody SurveyReplyDTO.CreateReply request){
+    QuestionnaireDTO.Response createReply(@RequestBody ReplyDTO.Create request){
         return surveyService.createReply(request);
     }
     @GetMapping("/reply")
-    SurveyReplyDTO.QuestionReply readReply(@RequestParam("user_id") Long id){
+    QuestionnaireDTO.Response readReply(@RequestParam("user_id") Long id){
         return surveyService.readReplyByUserId(id);
     }
 }
