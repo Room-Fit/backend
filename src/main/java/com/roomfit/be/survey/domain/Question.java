@@ -1,10 +1,12 @@
 package com.roomfit.be.survey.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "questions")
@@ -25,6 +27,9 @@ public class Question {
     @OneToMany(mappedBy = "question",cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Option> options;
 
+    @OneToMany(mappedBy = "question",cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<Reply> replies = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "questionnaire_id")
     private Questionnaire questionnaire;
@@ -37,6 +42,10 @@ public class Question {
     }
     public void addQuestionnaire(Questionnaire questionnaire) {
         this.questionnaire = questionnaire;
+    }
+    public void addReply(Reply reply){
+        reply.addQuestion(this);
+        replies.add(reply);
     }
     public static Question createSlider(String title, String optionDelimiter, List<Option> options) {
         return createQuestionWithOptions(title, QuestionType.SLIDER, optionDelimiter, options);
