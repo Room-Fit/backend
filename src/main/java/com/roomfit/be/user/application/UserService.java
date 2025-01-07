@@ -1,4 +1,6 @@
-package com.roomfit.be.user;
+package com.roomfit.be.user.application;
+
+import com.roomfit.be.user.application.dto.UserDTO;
 
 import java.util.List;
 

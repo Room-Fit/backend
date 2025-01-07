@@ -1,4 +1,4 @@
-    package com.roomfit.be.user;
+    package com.roomfit.be.user.domain;
 
 import com.roomfit.be.global.entity.BaseEntity;
 import jakarta.persistence.*;

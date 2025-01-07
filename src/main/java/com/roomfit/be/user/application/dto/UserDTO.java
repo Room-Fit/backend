@@ -1,5 +1,6 @@
-package com.roomfit.be.user;
+package com.roomfit.be.user.application.dto;
 
+import com.roomfit.be.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

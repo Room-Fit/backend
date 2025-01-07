@@ -1,5 +1,7 @@
-package com.roomfit.be.user;
+package com.roomfit.be.user.presentation;
 
+import com.roomfit.be.user.application.dto.UserDTO;
+import com.roomfit.be.user.application.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

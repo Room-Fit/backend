@@ -1,5 +1,9 @@
-package com.roomfit.be.user;
+package com.roomfit.be.user.application;
 
+import com.roomfit.be.user.application.dto.UserDTO;
+import com.roomfit.be.user.application.exception.UserNotFoundException;
+import com.roomfit.be.user.infrastructure.UserRepository;
+import com.roomfit.be.user.domain.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
