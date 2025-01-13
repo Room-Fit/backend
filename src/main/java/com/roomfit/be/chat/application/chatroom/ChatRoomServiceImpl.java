@@ -2,20 +2,17 @@ package com.roomfit.be.chat.application.chatroom;
 
 import com.roomfit.be.chat.domain.ChatRepository;
 import com.roomfit.be.chat.domain.ChatRoom;
-import com.roomfit.be.chat.domain.ChatRoomStatus;
 import com.roomfit.be.chat.domain.ChatRoomType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRepository chatRepository;
-
-    public ChatRoomServiceImpl(ChatRepository chatRepository) {
-        this.chatRepository = chatRepository;
-    }
 
     @Override
     public ChatRoomDTO.Response createRoom(ChatRoomDTO.Create request) {
@@ -37,9 +34,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     }
 
+    /**
+     * TODO : UserID 형식으로 변경되게
+     * @param userId
+     * @return
+     */
     @Override
     public List<ChatRoomDTO.Response> readMessageByUserId(Long userId) {
-        return null;
+        List<ChatRoom> chatRooms = chatRepository.findAll();
+        return chatRooms.stream()
+                .map(ChatRoomDTO.Response::of)
+                .toList();
     }
     private ChatRoom createGroupRoom(ChatRoomDTO.Create request){
         return ChatRoom.createGroupRoom(request.getName(), request.getMaxQuota());
