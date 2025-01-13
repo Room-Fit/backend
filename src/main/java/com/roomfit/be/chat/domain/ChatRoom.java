@@ -4,10 +4,12 @@ import com.roomfit.be.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity(name="chatrooms")
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRoom extends BaseEntity {
@@ -15,6 +17,7 @@ public class ChatRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
+
     @Enumerated(EnumType.STRING)
     ChatRoomType type;
 
@@ -26,14 +29,14 @@ public class ChatRoom extends BaseEntity {
 
     @Builder.Default
     Integer currentQuota = 1;
-    static ChatRoom createPrivateRoom(String name){
+    public static ChatRoom createPrivateRoom(String name){
         return ChatRoom.builder()
                 .type(ChatRoomType.PRIVATE)
                 .maxQuota(2)
                 .name(name)
                 .build();
     }
-    static ChatRoom createGroupRoom(String name, Integer maxQuota){
+    public static ChatRoom createGroupRoom(String name, Integer maxQuota){
         return ChatRoom.builder()
                 .type(ChatRoomType.GROUP)
                 .maxQuota(maxQuota)
