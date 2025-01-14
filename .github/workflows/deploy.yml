@@ -13,11 +13,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Download Deployment Files
-        uses: actions/download-artifact@v3
-        with:
-          name: deployment-files
-
       - name: Pull Docker Image
         run: |
           docker pull ${{ secrets.DOCKER_USERNAME }}/roomfit-server:${{ github.sha }}
