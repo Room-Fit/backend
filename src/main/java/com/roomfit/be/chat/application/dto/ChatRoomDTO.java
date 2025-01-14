@@ -1,4 +1,4 @@
-package com.roomfit.be.chat.application.chatroom;
+package com.roomfit.be.chat.application.dto;
 
 import com.roomfit.be.chat.domain.ChatRoom;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ public class ChatRoomDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class Response{
+    public static class Response{
         Long id;
         String name;
         String type;
@@ -35,7 +35,7 @@ public class ChatRoomDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class Create{
+    public static class Create{
         String name;
         String type;
         Integer maxQuota;
@@ -46,16 +46,18 @@ public class ChatRoomDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class Enter{
-
+    public static class Enter{
+        Long userId;
+        Long roomId;
     }
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class Leave{
-
+    public static class Leave{
+        Long userId;
+        Long roomId;
     }
 
 }

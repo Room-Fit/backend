@@ -1,8 +1,9 @@
-package com.roomfit.be.chat.application.chatroom;
+package com.roomfit.be.chat.application;
 
-import com.roomfit.be.chat.domain.ChatRepository;
+import com.roomfit.be.chat.application.dto.ChatRoomDTO;
 import com.roomfit.be.chat.domain.ChatRoom;
 import com.roomfit.be.chat.domain.ChatRoomType;
+import com.roomfit.be.chat.infrastructure.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService {
 
-    private final ChatRepository chatRepository;
+    private final ChatRoomRepository chatRepository;
 
     @Override
     public ChatRoomDTO.Response createRoom(ChatRoomDTO.Create request) {
@@ -46,6 +47,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .map(ChatRoomDTO.Response::of)
                 .toList();
     }
+
     private ChatRoom createGroupRoom(ChatRoomDTO.Create request){
         return ChatRoom.createGroupRoom(request.getName(), request.getMaxQuota());
     }
