@@ -1,0 +1,31 @@
+name: Deploy on Self-Hosted Server
+
+on:
+  workflow_run:
+    workflows:
+      - Build and Push Docker Image
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Download Deployment Files
+        uses: actions/download-artifact@v3
+        with:
+          name: deployment-files
+
+      - name: Pull Docker Image
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/roomfit-server:${{ github.sha }}
+
+      - name: Stop and Remove Old Container
+        run: |
+          docker stop roomfit-server || true
+          docker rm roomfit-server || true
+
+      - name: Run New Container
+        run: |
+          docker run -d --name roomfit-server -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/roomfit-server:${{ github.sha }}
