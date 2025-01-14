@@ -21,21 +21,20 @@ public class Message extends BaseEntity {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", insertable = false, updatable = false)
     private User sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = ChatRoom.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "chatroom_id", insertable = false, updatable = false)
     private ChatRoom chatRoom;
-
-    @Column(name = "sender_id")
-    private Long senderId;
 
     @Column(name = "chatroom_id")
     private Long chatRoomId;
 
-    public static Message create(Long senderId, Long chatRoomId, String content) {
+    @Column(name = "sender_id")
+    private Long senderId;
+    public static Message create(Long senderId,  Long chatRoomId, String content) {
         return Message.builder()
                 .content(content)
                 .senderId(senderId)
