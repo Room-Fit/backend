@@ -10,15 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 코드 체크아웃
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. JDK 17 설치
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          distribution: "adopt"
+          java-version: "21"
 
       # 3. Gradle 빌드 (jar 파일 생성)
       - name: Build jar file
