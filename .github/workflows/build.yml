@@ -22,7 +22,12 @@ jobs:
       - name: Grant execute permission for Gradle Wrapper
         run: chmod +x ./gradlew
 
-      # 3. Gradle 빌드 (jar 파일 생성)
+      - name: Create application.yml from secret
+        run: |
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_LOCAL_YML }}" | base64 --decode > src/main/resources/application-local.yml
+
+# 3. Gradle 빌드 (jar 파일 생성)
       - name: Build jar file
         run: |
           ./gradlew clean build -x test
