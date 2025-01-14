@@ -30,7 +30,7 @@ jobs:
 # 3. Gradle 빌드 (jar 파일 생성)
       - name: Build jar file
         run: |
-          ./gradlew clean build -x test
+          ./gradlew clean build -x test --no-build-cache
 
       # 4. Docker 로그인
       - name: Log in to Docker Hub
