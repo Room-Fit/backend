@@ -8,4 +8,4 @@ WORKDIR /app
 COPY build/libs/*SNAPSHOT.jar /app/roomfit-server.jar
 
 # 애플리케이션 실행 명령어
-CMD ["java", "-jar", "/app/roomfit-server.jar"]
+ENTRYPOINT ["java", "-jar", "/app/roomfit-server.jar"]
