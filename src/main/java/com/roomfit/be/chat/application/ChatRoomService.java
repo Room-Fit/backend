@@ -1,4 +1,7 @@
-package com.roomfit.be.chat.application.chatroom;
+package com.roomfit.be.chat.application;
+
+
+import com.roomfit.be.chat.application.dto.ChatRoomDTO;
 
 import java.util.List;
 
