@@ -1,5 +1,6 @@
 package com.roomfit.be.auth.application.dto;
 
+import com.google.errorprone.annotations.NoAllocation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,4 +29,22 @@ public class AuthDTO {
                     .build();
         }
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SendCodeRequest{
+        String email;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VerifyCodeRequest{
+        String authToken;
+        String code;
+    }
+
 }

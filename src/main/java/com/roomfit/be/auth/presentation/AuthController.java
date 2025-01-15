@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -27,19 +30,15 @@ public class AuthController {
      * 이미 가입된 이메일은 접근이 불가하게
      */
     @PostMapping("/code")
-    String sendVerificationCode(@RequestBody String email, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-
-        authService.generateVerificationCode(sessionId, email);
-        return "successfully";
+    String sendVerificationCode(@RequestBody AuthDTO.SendCodeRequest request) {
+        String authToken = UUID.randomUUID().toString();
+        authService.generateVerificationCode(authToken, request.getEmail());
+        return authToken;
     }
 
     @PostMapping("/verify")
-    boolean verifyVerificationCode(@RequestBody String code, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-        return authService.verifyVerificationCode(sessionId, code);
+        boolean verifyVerificationCode(@RequestBody AuthDTO.VerifyCodeRequest request) {
+        return authService.verifyVerificationCode(request.getAuthToken(), request.getCode());
 
     }
 }
