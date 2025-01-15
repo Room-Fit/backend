@@ -1,6 +1,6 @@
 package com.roomfit.be.auth.application;
 
-import com.roomfit.be.auth.application.domain.JwtTokenProvider;
+import com.roomfit.be.auth.domain.JwtTokenProvider;
 import com.roomfit.be.auth.application.dto.AuthDTO;
 import com.roomfit.be.auth.application.dto.UserDetails;
 import com.roomfit.be.email.EmailSendEvent;

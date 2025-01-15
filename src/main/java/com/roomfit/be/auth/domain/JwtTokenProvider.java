@@ -1,4 +1,4 @@
-package com.roomfit.be.auth.application.domain;
+package com.roomfit.be.auth.domain;
 
 import com.roomfit.be.auth.application.dto.UserDetails;
 import io.jsonwebtoken.Claims;
