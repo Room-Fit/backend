@@ -1,6 +1,7 @@
 package com.roomfit.be.auth.presentation;
 
 import com.roomfit.be.auth.application.AuthService;
+import com.roomfit.be.auth.application.dto.AuthDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,9 @@ public class AuthController {
 
     private final AuthService authService;
     @PostMapping("/login")
-    void login() {
+    AuthDTO.LoginResponse login(@RequestBody AuthDTO.Login request) {
+
+        return authService.authenticate(request);
     }
 
     /**
@@ -25,10 +28,8 @@ public class AuthController {
      */
     @PostMapping("/code")
     String sendVerificationCode(@RequestBody String email, HttpServletRequest request) {
-        log.info(email);
         HttpSession session = request.getSession();
         String sessionId = session.getId();
-        log.info(session.getId());
 
         authService.generateVerificationCode(sessionId, email);
         return "successfully";
