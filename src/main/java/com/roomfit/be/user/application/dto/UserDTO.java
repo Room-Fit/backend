@@ -16,7 +16,13 @@ public class UserDTO {
     public static class Create{
         private String nickname;
         private String email;
+        private String role;
         private String password;
+        private String birth;
+        private Integer studentId;
+        private String college;
+        private String gender;
+        private String authToken;
     }
 
     @Data
@@ -29,6 +35,10 @@ public class UserDTO {
         private String email;
         private String role;
         private String password;
+        private String birth;
+        private Integer studentId;
+        private String college;
+        private String gender;
         public static Response of(User user) {
             return Response.builder()
                     .id(user.getId())
@@ -36,6 +46,10 @@ public class UserDTO {
                     .email(user.getEmail())
                     .role(user.getRole().name())
                     .password(user.getPassword())
+                    .birth(user.getBirth())
+                    .studentId(user.getStudentId())
+                    .college(user.getCollege())
+                    .gender(user.getGender().name())
                     .build();
         }
     }
