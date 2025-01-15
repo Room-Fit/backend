@@ -31,6 +31,15 @@ public class UserServiceImpl implements UserService{
 
         return UserDTO.Response.of(foundUser);
     }
+
+    @Override
+    public UserDTO.Response readByEmail(String email){
+        User foundUser =  userRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException(""));
+
+        return UserDTO.Response.of(foundUser);
+    }
+
     public List<UserDTO.Response> readAll() {
         List<User> foundUser = userRepository.findAll();
 
