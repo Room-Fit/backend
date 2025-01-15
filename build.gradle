@@ -61,11 +61,17 @@ dependencies {
     //Redis
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     //Email
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    //JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
+    //CONFIG
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
 tasks.named('test') {
