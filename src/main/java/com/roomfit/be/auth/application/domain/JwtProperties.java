@@ -1,4 +1,4 @@
-package com.roomfit.be.auth.application;
+package com.roomfit.be.auth.application.domain;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
