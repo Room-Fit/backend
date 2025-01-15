@@ -27,6 +27,7 @@ jobs:
         run: |
           echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_LOCAL_YML }}" | base64 --decode > src/main/resources/application-local.yml
+          echo "${{ secrets.APPLICATION_JWT_YML }}" | base64 --decode > src/main/resources/application-jwt.yml
 
 # 3. Gradle 빌드 (jar 파일 생성)
       - name: Build jar file
@@ -42,6 +43,8 @@ jobs:
         run: |
           echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
           echo "${{ secrets.APPLICATION_LOCAL_YML }}" | base64 --decode > src/main/resources/application-local.yml
+          echo "${{ secrets.APPLICATION_JWT_YML }}" | base64 --decode > src/main/resources/application-jwt.yml
+          
           ls -l src/main/resources/
 
       # 6. Docker 이미지 빌드
