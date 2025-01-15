@@ -27,12 +27,14 @@ public class UserDTO {
         private Long id;
         private String nickname;
         private String email;
+        private String role;
         private String password;
         public static Response of(User user) {
             return Response.builder()
                     .id(user.getId())
                     .nickname(user.getNickname())
                     .email(user.getEmail())
+                    .role(user.getRole().name())
                     .password(user.getPassword())
                     .build();
         }
