@@ -45,10 +45,10 @@ public class AuthServiceImpl implements AuthService{
      */
     @Async("taskExecutor")
     @Override
-    public void generateVerificationCode(String sessionId, String email) {
+    public void generateVerificationCode(String authToken, String email) {
 
         String code = codeGenerator.generateSecureRandomCode(5);
-        reactiveRedisService.saveWithTTL(sessionId, code, 300)
+        reactiveRedisService.saveWithTTL(authToken, code, 300)
                 .doOnTerminate(() -> {
                     String subject = "Verification Code";
                     String body = "Here is your verification code: " + code;
@@ -58,11 +58,25 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public boolean verifyVerificationCode(String sessionId, String code) {
+    public boolean verifyVerificationCode(String authToken, String code) {
         /**
          * 동기적으로
          */
-        String savedCode = (String) reactiveRedisService.get(sessionId).block(); // block()을 사용하여 동기적으로 값 가져오기
-        return savedCode != null && savedCode.equals(code);
+        String savedCode = (String) reactiveRedisService.get(authToken).block(); // block()을 사용하여 동기적으로 값 가져오기
+        reactiveRedisService.saveWithTTL(authToken, true, 300)
+                .subscribe();
+        if (savedCode != null && savedCode.equals(code)) {
+            saveVerificationStatus(authToken, "success");
+            return true;
+        } else {
+            saveVerificationStatus(authToken, "failure");
+            return false;
+        }
+    }
+
+    @Async("taskExecutor")
+    public void saveVerificationStatus(String authToken, String status) {
+        // 인증 상태를 Redis에 동기적으로 저장
+        reactiveRedisService.saveWithTTL(authToken, status, 1000).subscribe();  // block()을 사용하여 동기적으로 저장
     }
 }
