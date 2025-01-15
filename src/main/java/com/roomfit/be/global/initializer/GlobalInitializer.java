@@ -17,8 +17,8 @@ public class GlobalInitializer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        User user1 = User.createUser("nick1","email@email.com","password");
-        User user2 = User.createUser("nick2","email2@email.com","password");
+        User user1 = User.createUser("nick1","email@email.com","password","2001", 2021428507, "인문대학","M");
+        User user2 = User.createUser("nick2","email2@email.com","password","2001", 2021428507, "인문대학","M");
         userRepository.save(user1);
         userRepository.save(user2);
         ChatRoom room = ChatRoom.createPrivateRoom("1");
