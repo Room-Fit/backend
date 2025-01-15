@@ -56,8 +56,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     //Jackson
-
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    //Redis
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+
+    //Email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
 }
 
 tasks.named('test') {
