@@ -2,7 +2,7 @@
 
     import com.roomfit.be.global.entity.BaseEntity;
     import com.roomfit.be.message.domain.Message;
-    import com.roomfit.be.participation.Participation;
+//    import com.roomfit.be.participation.Participation;
     import jakarta.persistence.*;
     import lombok.Getter;
     import lombok.NoArgsConstructor;
@@ -28,8 +28,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToMany()
-    List<Participation> participationList;
+//    @OneToMany()
+//    List<Participation> participationList;
 
     @OneToMany()
     private List<Message> messages;
