@@ -7,7 +7,6 @@ import com.roomfit.be.survey.application.exception.QuestionnaireNotFoundExceptio
 import com.roomfit.be.survey.domain.Question;
 import com.roomfit.be.survey.domain.Questionnaire;
 import com.roomfit.be.survey.infrastructure.SurveyRepository;
-import com.roomfit.be.survey.infrastructure.support.ReplyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
