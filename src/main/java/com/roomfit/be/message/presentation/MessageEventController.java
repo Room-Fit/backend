@@ -19,9 +19,7 @@ public class MessageEventController {
 
     @MessageMapping("/send/{roomId}")
     public void sendMessage(@DestinationVariable Long roomId, MessageDTO.Send message) {
-        log.info(message.toString());
         messagingTemplate.convertAndSend("/topic/room/" + roomId, message);
-
         messageService.sendMessage(message);
     }
 }

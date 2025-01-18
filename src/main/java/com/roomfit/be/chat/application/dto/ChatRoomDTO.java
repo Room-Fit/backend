@@ -46,15 +46,6 @@ public class ChatRoomDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Enter{
-        Long userId;
-        Long roomId;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class Leave{
         Long userId;
         Long roomId;

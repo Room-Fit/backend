@@ -2,10 +2,13 @@ package com.roomfit.be.auth.presentation;
 
 import com.roomfit.be.auth.application.AuthService;
 import com.roomfit.be.auth.application.dto.AuthDTO;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.roomfit.be.global.response.CommonResponse;
+import com.roomfit.be.global.response.ResponseFactory;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,25 +23,44 @@ import java.util.UUID;
 public class AuthController {
 
     private final AuthService authService;
-    @PostMapping("/login")
-    AuthDTO.LoginResponse login(@RequestBody AuthDTO.Login request) {
 
-        return authService.authenticate(request);
+    /**
+     * 로그인
+     */
+    @PostMapping("/login")
+    public ResponseEntity<CommonResponse<AuthDTO.LoginResponse>> login(
+            @RequestBody @Parameter(description = "로그인 정보") AuthDTO.Login request) {
+        AuthDTO.LoginResponse response = authService.authenticate(request);
+        CommonResponse<AuthDTO.LoginResponse> commonResponse = ResponseFactory.success(response, "로그인 성공");
+        return ResponseEntity
+                .status(HttpStatus.OK)  // 200 OK
+                .body(commonResponse);  // 응답 본문
     }
 
     /**
-     * 이미 가입된 이메일은 접근이 불가하게
+     * 인증 코드 전송
      */
     @PostMapping("/code")
-    String sendVerificationCode(@RequestBody AuthDTO.SendCodeRequest request) {
+    public ResponseEntity<CommonResponse<String>> sendVerificationCode(
+            @RequestBody @Parameter(description = "이메일") AuthDTO.SendCodeRequest request) {
         String authToken = UUID.randomUUID().toString();
         authService.generateVerificationCode(authToken, request.getEmail());
-        return authToken;
+        CommonResponse<String> commonResponse = ResponseFactory.success(authToken, "인증 코드 전송 성공");
+        return ResponseEntity
+                .status(HttpStatus.OK)  // 200 OK
+                .body(commonResponse);  // 응답 본문
     }
 
+    /**
+     * 인증 코드 검증
+     */
     @PostMapping("/verify")
-        boolean verifyVerificationCode(@RequestBody AuthDTO.VerifyCodeRequest request) {
-        return authService.verifyVerificationCode(request.getAuthToken(), request.getCode());
-
+    public ResponseEntity<CommonResponse<Boolean>> verifyVerificationCode(
+            @RequestBody @Parameter(description = "인증 코드 요청 정보") AuthDTO.VerifyCodeRequest request) {
+        boolean isVerified = authService.verifyVerificationCode(request.getAuthToken(), request.getCode());
+        CommonResponse<Boolean> commonResponse = ResponseFactory.success(isVerified, isVerified ? "인증 성공" : "인증 실패");
+        return ResponseEntity
+                .status(HttpStatus.OK)  // 200 OK
+                .body(commonResponse);  // 응답 본문
     }
 }
