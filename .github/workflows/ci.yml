@@ -1,0 +1,35 @@
+name: build without test
+
+on:
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: "adopt"
+          java-version: "21"
+
+      - name: Grant execute permission for Gradle Wrapper
+        run: chmod +x ./gradlew
+
+      - name: Create application.yml from secret
+        run: |
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_LOCAL_YML }}" | base64 --decode > src/main/resources/application-local.yml
+          echo "${{ secrets.APPLICATION_JWT_YML }}" | base64 --decode > src/main/resources/application-jwt.yml
+
+      # 3. Gradle 빌드 (jar 파일 생성)
+      - name: Build jar file
+        run: |
+          ./gradlew clean build -x test --no-build-cache
