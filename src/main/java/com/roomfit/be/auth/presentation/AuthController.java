@@ -4,6 +4,7 @@ import com.roomfit.be.auth.application.AuthService;
 import com.roomfit.be.auth.application.dto.AuthDTO;
 import com.roomfit.be.global.response.CommonResponse;
 import com.roomfit.be.global.response.ResponseFactory;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -27,6 +27,10 @@ public class AuthController {
     /**
      * 로그인
      */
+    @Operation(
+            summary = "로그인",
+            description = "사용자가 제공한 로그인 정보로 인증을 수행합니다."
+    )
     @PostMapping("/login")
     public ResponseEntity<CommonResponse<AuthDTO.LoginResponse>> login(
             @RequestBody @Parameter(description = "로그인 정보") AuthDTO.Login request) {
@@ -40,6 +44,10 @@ public class AuthController {
     /**
      * 인증 코드 전송
      */
+    @Operation(
+            summary = "인증 코드 전송",
+            description = "이메일로 인증 코드를 전송합니다."
+    )
     @PostMapping("/code")
     public ResponseEntity<CommonResponse<String>> sendVerificationCode(
             @RequestBody @Parameter(description = "이메일") AuthDTO.SendCodeRequest request) {
@@ -54,6 +62,10 @@ public class AuthController {
     /**
      * 인증 코드 검증
      */
+    @Operation(
+            summary = "인증 코드 검증",
+            description = "사용자가 제공한 인증 코드가 유효한지 검증합니다."
+    )
     @PostMapping("/verify")
     public ResponseEntity<CommonResponse<Boolean>> verifyVerificationCode(
             @RequestBody @Parameter(description = "인증 코드 요청 정보") AuthDTO.VerifyCodeRequest request) {
