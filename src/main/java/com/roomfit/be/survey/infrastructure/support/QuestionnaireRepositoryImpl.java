@@ -65,13 +65,12 @@ public class QuestionnaireRepositoryImpl implements QuestionnaireRepository {
         List<Long> generatedQuestionIds = jdbcTemplate.queryForList(getLastInsertedIdsSql, Long.class, questionnaireId, questions.size());
 
         for (int i = 0; i < questions.size(); i++) {
-            questions.get(i).setId(generatedQuestionIds.get(i));
+            questions.get(i).setId(generatedQuestionIds.get(questions.size()-1-i));
         }
     }
 
     private void saveOptions(List<Question> questions) {
         String optionSql = "INSERT INTO options (option_label, option_value, question_id) VALUES (?, ?, ?)";
-
         List<Object[]> optionParams = new ArrayList<>();
 
         for (Question question : questions) {
