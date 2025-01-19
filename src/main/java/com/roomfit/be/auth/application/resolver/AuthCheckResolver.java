@@ -30,10 +30,10 @@ public class AuthCheckResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authorizationHeader = request.getHeader("Authorization");
-
+        if(authorizationHeader.isEmpty()) throw new RuntimeException("");
         // Extract the token from the Authorization header
         String token = jwtTokenExtractor.extractTokenFromHeader(authorizationHeader);
-
+        if(token.isEmpty()) throw new RuntimeException("");
         // Extract the role and other user details from the token
         UserDetails userDetails = jwtTokenProvider.extractUserDetailFromToken(token);
 
