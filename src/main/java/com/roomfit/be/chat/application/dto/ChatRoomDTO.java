@@ -39,7 +39,6 @@ public class ChatRoomDTO {
         String name;
         String type;
         Integer maxQuota;
-        Integer currentQuota;
     }
 
     @Data
