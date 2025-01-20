@@ -1,6 +1,6 @@
-package com.roomfit.be.message.application.dto;
+package com.roomfit.be.chat.application.dto;
 
-import com.roomfit.be.message.domain.Message;
+import com.roomfit.be.chat.domain.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +34,6 @@ public class MessageDTO {
                     .createdAt(message.getCreatedAt())
                     .build();
         }
-
     }
 
     @Data
@@ -43,14 +42,14 @@ public class MessageDTO {
     @AllArgsConstructor
     public static class Send{
         Long roomId;
-        SenderDTO sender;
+        Sender sender;
         String content;
     }
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SenderDTO{
+    public static class Sender{
         Long userId;
         String nickname;
     }

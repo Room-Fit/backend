@@ -17,7 +17,6 @@ public class ReplyDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Create{
-        private Long id;
         private List<QuestionReply> questionReplies;
     }
 
