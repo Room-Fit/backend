@@ -1,17 +1,20 @@
     package com.roomfit.be.user.domain;
 
     import com.roomfit.be.global.entity.BaseEntity;
-    import com.roomfit.be.message.domain.Message;
-//    import com.roomfit.be.participation.Participation;
+    import com.roomfit.be.chat.domain.Message;
+//    import com.roomfit.be.participation.domain.Participation;
+    import com.roomfit.be.participation.domain.Participation;
     import jakarta.persistence.*;
     import lombok.Getter;
     import lombok.NoArgsConstructor;
+    import lombok.ToString;
 
     import java.util.List;
 
 @Entity(name="users")
 @Getter
 @NoArgsConstructor
+@ToString
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +31,21 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-//    @OneToMany()
-//    List<Participation> participationList;
+    @OneToMany()
+    @ToString.Exclude
+    List<Participation> participationList;
 
     @OneToMany()
+    @ToString.Exclude
     private List<Message> messages;
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public void setParticipationList(List<Participation> participationList) {
+        this.participationList = participationList;
+    }
 
     public User(String nickname, String email, String password, UserRole role, String birth, Integer studentId, String college, Gender gender) {
         this.nickname = nickname;
