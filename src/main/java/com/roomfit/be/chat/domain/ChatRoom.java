@@ -26,6 +26,8 @@ public class ChatRoom extends BaseEntity {
     Long id;
     String name;
 
+    String description;
+
     @Enumerated(EnumType.STRING)
     ChatRoomType type;
 
@@ -38,6 +40,8 @@ public class ChatRoom extends BaseEntity {
     @Builder.Default
     Integer currentQuota = DEFAULT_QUOTA;
 
+    String dormitory;
+
 
     @OneToMany()
     List<Participation> participationList;
@@ -49,11 +53,13 @@ public class ChatRoom extends BaseEntity {
                 .name(name)
                 .build();
     }
-    public static ChatRoom createGroupRoom(String name, Integer maxQuota){
+    public static ChatRoom createGroupRoom(String name, String description, String dormitory, Integer maxQuota){
         return ChatRoom.builder()
                 .type(ChatRoomType.GROUP)
                 .maxQuota(maxQuota)
                 .name(name)
+                .description(description)
+                .dormitory(dormitory)
                 .build();
     }
 }
