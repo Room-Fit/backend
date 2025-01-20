@@ -1,10 +1,9 @@
-package com.roomfit.be.message.presentation;
+package com.roomfit.be.chat.presentation;
 
-import com.roomfit.be.message.application.MessageService;
-import com.roomfit.be.message.application.dto.MessageDTO;
+import com.roomfit.be.chat.application.MessageService;
+import com.roomfit.be.chat.application.dto.MessageDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.index.qual.SameLen;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
