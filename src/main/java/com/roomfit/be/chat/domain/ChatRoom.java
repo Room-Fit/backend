@@ -1,8 +1,7 @@
 package com.roomfit.be.chat.domain;
 
 import com.roomfit.be.global.entity.BaseEntity;
-//import com.roomfit.be.participation.Participation;
-import com.roomfit.be.user.domain.User;
+import com.roomfit.be.participation.domain.Participation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,8 +39,8 @@ public class ChatRoom extends BaseEntity {
     Integer currentQuota = DEFAULT_QUOTA;
 
 
-//    @OneToMany()
-//    List<Participation> participationList;
+    @OneToMany()
+    List<Participation> participationList;
 
     public static ChatRoom createPrivateRoom(String name){
         return ChatRoom.builder()
