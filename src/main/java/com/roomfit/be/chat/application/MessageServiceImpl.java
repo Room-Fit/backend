@@ -1,8 +1,8 @@
-package com.roomfit.be.message.application;
+package com.roomfit.be.chat.application;
 
-import com.roomfit.be.message.application.dto.MessageDTO;
-import com.roomfit.be.message.domain.Message;
-import com.roomfit.be.message.infrastructure.MessageRepository;
+import com.roomfit.be.chat.application.dto.MessageDTO;
+import com.roomfit.be.chat.domain.Message;
+import com.roomfit.be.chat.infrastructure.MessageRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,18 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * MessageEventService로 정정
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MessageServiceImpl implements  MessageService{
     private final MessageRepository messageRepository;
-    @Override
-    public List<MessageDTO.Response> readMessage() {
-        List<Message> foundMessage =  messageRepository.findAll();
-        return foundMessage.stream()
-                .map(MessageDTO.Response::of)
-                .toList();
-    }
     @Transactional
     @Override
     public MessageDTO.Response sendMessage(MessageDTO.Send request) {
