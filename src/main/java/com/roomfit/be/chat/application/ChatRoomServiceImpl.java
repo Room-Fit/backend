@@ -53,7 +53,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     private ChatRoom createGroupRoom(ChatRoomDTO.Create request){
-        return ChatRoom.createGroupRoom(request.getName(), request.getMaxQuota());
+        return ChatRoom.createGroupRoom(request.getName(), request.getDescription(), request.getDormitory(), request.getMaxQuota());
     }
     private ChatRoom createPrivateRoom(ChatRoomDTO.Create request){
         return ChatRoom.createPrivateRoom(request.getName());

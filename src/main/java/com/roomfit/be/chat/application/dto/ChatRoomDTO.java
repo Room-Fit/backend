@@ -15,10 +15,12 @@ public class ChatRoomDTO {
     public static class Response{
         Long id;
         String name;
+        String description;
         String type;
         String status;
         Integer maxQuota;
         Integer currentQuota;
+        String dormitory;
         public static Response of(ChatRoom chatRoom){
             return Response.builder()
                     .id(chatRoom.getId())
@@ -37,8 +39,10 @@ public class ChatRoomDTO {
     @AllArgsConstructor
     public static class Create{
         String name;
+        String description;
         String type;
         Integer maxQuota;
+        String dormitory;
     }
 
     @Data
