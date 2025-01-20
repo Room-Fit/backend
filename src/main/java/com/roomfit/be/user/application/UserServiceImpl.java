@@ -2,7 +2,8 @@ package com.roomfit.be.user.application;
 
 import com.roomfit.be.redis.application.ReactiveRedisService;
 import com.roomfit.be.user.application.dto.UserDTO;
-import com.roomfit.be.user.application.exception.UserNotFoundException;
+import com.roomfit.be.user.application.exception.UserErrorCode;
+import com.roomfit.be.user.application.exception.UserException;
 import com.roomfit.be.user.infrastructure.UserRepository;
 import com.roomfit.be.user.domain.User;
 import jakarta.transaction.Transactional;
@@ -17,12 +18,17 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final ReactiveRedisService reactiveRedisService;
 
+    /**
+     * TODO: AlreadyExist 추가 필요
+     */
     @Transactional
     @Override
     public UserDTO.Response create(UserDTO.Create request) {
         String status = (String) reactiveRedisService.get(request.getAuthToken()).block(); // block()을 사용하여 동기적으로 값 가져오기
-        if(status == null || !status.equals("success")) throw new RuntimeException("이메일 인증을 해주세요");
-
+        if(status == null || !status.equals("success")) {
+            throw new UserException(UserErrorCode.EMAIL_VERIFICATION_REQUIRED);
+        }
+        
         User newUser = User.createUser(request.getNickname(), request.getEmail(), request.getPassword(), request.getBirth(), request.getStudentId(), request.getCollege(), request.getGender());
         User savedUser = userRepository.save(newUser);
 
@@ -32,7 +38,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDTO.Response readById(Long id) {
         User foundUser =  userRepository.findById(id)
-                .orElseThrow(()-> new UserNotFoundException(""));
+                .orElseThrow(()-> new UserException(UserErrorCode.NOT_FOUND));
 
         return UserDTO.Response.of(foundUser);
     }
@@ -40,11 +46,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDTO.Response readByEmail(String email){
         User foundUser =  userRepository.findByEmail(email)
-                .orElseThrow(()-> new UserNotFoundException(""));
+                .orElseThrow(()-> new UserException(UserErrorCode.NOT_FOUND));
 
         return UserDTO.Response.of(foundUser);
     }
 
+    @Override
     public List<UserDTO.Response> readAll() {
         List<User> foundUser = userRepository.findAll();
 
