@@ -1,4 +1,4 @@
-package com.roomfit.be.auth.domain;
+package com.roomfit.be.auth.domain.jwt;
 
 import com.roomfit.be.auth.application.dto.UserDetails;
 import io.jsonwebtoken.Claims;
@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+//TODO: 날짜 고정 CLock 기반으로 변경
 @Component
 @RequiredArgsConstructor
 @Slf4j
