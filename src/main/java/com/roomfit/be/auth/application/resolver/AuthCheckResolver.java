@@ -1,7 +1,7 @@
 package com.roomfit.be.auth.application.resolver;
 
-import com.roomfit.be.auth.domain.JwtTokenExtractor;
-import com.roomfit.be.auth.domain.JwtTokenProvider;
+import com.roomfit.be.auth.domain.jwt.JwtTokenExtractor;
+import com.roomfit.be.auth.domain.jwt.JwtTokenProvider;
 import com.roomfit.be.auth.application.dto.UserDetails;
 import com.roomfit.be.global.annontation.AuthCheck;
 import jakarta.servlet.http.HttpServletRequest;
