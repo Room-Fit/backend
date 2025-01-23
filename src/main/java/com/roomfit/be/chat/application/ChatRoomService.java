@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface ChatRoomService {
     ChatRoomDTO.Response createRoom(Long userId, ChatRoomDTO.Create request);
-    ChatRoomDTO.Response enterRoom(Long userId,Long roomId);
+    void enterRoom(Long userId,Long roomId);
     void leaveRoom(ChatRoomDTO.Leave request);
     List<MessageDTO.Response> readMessageByRoomId(Long roomId);
+
+    List<ChatRoomDTO.Response> readAllChatRooms(String type);
 }
