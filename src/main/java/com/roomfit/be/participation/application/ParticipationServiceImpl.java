@@ -30,7 +30,7 @@ public class ParticipationServiceImpl implements  ParticipationService{
     }
 
     @Override
-    public ChatRoom joinAsParticipant(Long userId, Long chatRoomId) {
+    public void joinAsParticipant(Long userId, Long chatRoomId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
@@ -38,7 +38,6 @@ public class ParticipationServiceImpl implements  ParticipationService{
         
         Participation participation = Participation.participateAsParticipant(user, chatRoom);
         participationRepository.save(participation);
-        return chatRoom;
     }
 
     @Override
