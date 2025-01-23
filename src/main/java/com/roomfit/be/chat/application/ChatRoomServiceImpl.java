@@ -5,10 +5,13 @@ import com.roomfit.be.chat.application.dto.MessageDTO;
 import com.roomfit.be.chat.domain.ChatRoom;
 import com.roomfit.be.chat.domain.ChatRoomType;
 import com.roomfit.be.chat.infrastructure.ChatRoomRepository;
+import com.roomfit.be.global.event.EventPublisher;
 import com.roomfit.be.participation.application.ParticipationService;
-import jakarta.transaction.Transactional;
+import com.roomfit.be.participation.application.event.JoinAsHostEvent;
+import com.roomfit.be.participation.application.event.JoinAsParticipantEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ import java.util.List;
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRoomRepository chatRepository;
-    private final ParticipationService participationService;
+    private final EventPublisher eventPublisher;
     @Override
     public ChatRoomDTO.Response createRoom(Long userId, ChatRoomDTO.Create request) {
         ChatRoom chatRoom = switch (ChatRoomType.fromString(request.getType())) {
@@ -25,15 +28,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             case PRIVATE -> createPrivateRoom(request);
         };
         ChatRoom savedChatRoom =  chatRepository.save(chatRoom);
-        participationService.joinAsHost(userId, savedChatRoom.getId());
-
+        eventPublisher.publish(JoinAsHostEvent.of(this, userId, savedChatRoom.getId()));
         return ChatRoomDTO.Response.of(savedChatRoom);
     }
 
     @Override
-    public ChatRoomDTO.Response enterRoom(Long userId, Long roomId) {
-        ChatRoom enteredRoom= participationService.joinAsParticipant(userId, roomId);
-        return ChatRoomDTO.Response.of(enteredRoom);
+    public void enterRoom(Long userId, Long roomId) {
+        eventPublisher.publish(JoinAsParticipantEvent.of(this, userId, roomId));
     }
 
     @Override
@@ -44,11 +45,19 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     /**
      * TODO : UserID 형식으로 변경되게
      */
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<MessageDTO.Response> readMessageByRoomId(Long roomId) {
         return chatRepository.findMessagesByChatRoomId(roomId).stream()
                 .map(MessageDTO.Response::of)
+                .toList();
+    }
+
+    @Override
+    public List<ChatRoomDTO.Response> readAllChatRooms(String type) {
+        ChatRoomType chatRoomType = ChatRoomType.fromString(type);
+        return chatRepository.findByType(chatRoomType).stream()
+                .map(ChatRoomDTO.Response::of)
                 .toList();
     }
 

@@ -1,5 +1,7 @@
-package com.roomfit.be.email;
+package com.roomfit.be.email.presentation;
 
+import com.roomfit.be.email.application.EmailSendEvent;
+import com.roomfit.be.email.application.EmailService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -16,6 +18,6 @@ public class EmailEventListener {
     @EventListener
     @Async("taskExecutor")
     public void onEmailSendEventHandler(EmailSendEvent event) throws MessagingException {
-        emailService.sendEmail(event.recipient(), event.subject(), event.body());
+        emailService.sendEmail(event.getRecipient(), event.getSubject(), event.getBody());
     }
 }

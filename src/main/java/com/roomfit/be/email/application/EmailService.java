@@ -1,4 +1,4 @@
-package com.roomfit.be.email;
+package com.roomfit.be.email.application;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
