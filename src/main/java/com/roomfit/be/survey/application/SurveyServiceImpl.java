@@ -4,6 +4,8 @@ import com.roomfit.be.survey.application.dto.QuestionDTO;
 import com.roomfit.be.survey.application.dto.QuestionnaireDTO;
 import com.roomfit.be.survey.application.dto.ReplyDTO;
 import com.roomfit.be.survey.application.exception.QuestionnaireNotFoundException;
+import com.roomfit.be.survey.application.exception.QuestionnaireSaveFailureException;
+import com.roomfit.be.survey.application.exception.ReplySaveFailureException;
 import com.roomfit.be.survey.domain.Question;
 import com.roomfit.be.survey.domain.Questionnaire;
 import com.roomfit.be.survey.infrastructure.SurveyRepository;
@@ -32,22 +34,25 @@ public class SurveyServiceImpl implements  SurveyService{
                 request.getDescription(),
                 convertToQuestions(request.getQuestions())
         );
-
-        surveyRepository.saveBulk(questionnaire);
+        try {
+            surveyRepository.saveBulk(questionnaire);
+        }catch (Exception e){
+            throw new QuestionnaireSaveFailureException();
+        }
         return readLatestQuestionnaire();
     }
 
     @Override
     public QuestionnaireDTO.Response readLatestQuestionnaire() {
         Questionnaire foundQuestionnaire = surveyRepository.findTopByOrderByCreatedAtDesc()
-                .orElseThrow(()-> new QuestionnaireNotFoundException("ERROR"));
+                .orElseThrow(QuestionnaireNotFoundException::new);
 
         return QuestionnaireDTO.Response.of(foundQuestionnaire);
     }
     @Transactional
     public QuestionnaireDTO.Response readLatestQuestionnaireWithReplies() {
         Questionnaire foundQuestionnaire = surveyRepository.findTopByOrderByCreatedAtDesc()
-                .orElseThrow(()-> new QuestionnaireNotFoundException("ERROR"));
+                .orElseThrow(QuestionnaireNotFoundException::new);
 
         return QuestionnaireDTO.Response.ofWithReplies(foundQuestionnaire);
     }
@@ -67,7 +72,11 @@ public class SurveyServiceImpl implements  SurveyService{
     @Transactional
     @Override
     public QuestionnaireDTO.Response createReply(ReplyDTO.Create request) {
-        surveyRepository.saveBulkReply(request);
+        try {
+            surveyRepository.saveBulkReply(request);
+        }catch (Exception e){
+            throw new ReplySaveFailureException();
+        }
         return readLatestQuestionnaireWithReplies();
     }
 
