@@ -4,11 +4,8 @@ public class ResponseFactory {
 
     // 성공 응답 (데이터 포함 + 커스텀 코드)
     public static <T> CommonResponse<T> success(T data, String message) {
-        return CommonResponse.<T>builder()
-                .success(true)
-                .message(message)
-                .data(data)
-                .build();
+        return new CommonResponse<>(true, message, data);
+
     }
 
     public static <T> CommonResponse<T> success(String message) {
@@ -16,9 +13,6 @@ public class ResponseFactory {
     }
     // 실패 응답
     public static CommonResponse<Void> failure(String message) {
-        return CommonResponse.<Void>builder()
-                .success(false)
-                .message(message)
-                .build();
+        return new CommonResponse<>(false, message);
     }
 }
