@@ -1,11 +1,11 @@
 package com.roomfit.be.user.application;
 
-import com.roomfit.be.redis.application.ReactiveRedisService;
+import com.roomfit.be.auth.application.AuthService;
 import com.roomfit.be.user.application.dto.UserDTO;
-import com.roomfit.be.user.application.exception.UserErrorCode;
-import com.roomfit.be.user.application.exception.UserException;
-import com.roomfit.be.user.infrastructure.UserRepository;
+import com.roomfit.be.user.application.exception.UserEmailVerificationRequiredException;
+import com.roomfit.be.user.application.exception.UserNotFoundException;
 import com.roomfit.be.user.domain.User;
+import com.roomfit.be.user.infrastructure.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,19 +16,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
-    private final ReactiveRedisService reactiveRedisService;
-
+    private final AuthService authService;
     /**
      * TODO: AlreadyExist 추가 필요
      */
     @Transactional
     @Override
     public UserDTO.Response create(UserDTO.Create request) {
-        String status = (String) reactiveRedisService.get(request.getAuthToken()).block(); // block()을 사용하여 동기적으로 값 가져오기
-        if(status == null || !status.equals("success")) {
-            throw new UserException(UserErrorCode.EMAIL_VERIFICATION_REQUIRED);
+        /**
+         * 해당 조건 나중에 resolver 로 처리
+         */
+        if(!authService.checkEmailVerificationStatus(request.getAuthToken())) {
+            throw new UserEmailVerificationRequiredException();
         }
-        
+
         User newUser = User.createUser(request.getNickname(), request.getEmail(), request.getPassword(), request.getBirth(), request.getStudentId(), request.getCollege(), request.getGender());
         User savedUser = userRepository.save(newUser);
 
@@ -38,15 +39,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDTO.Response readById(Long id) {
         User foundUser =  userRepository.findById(id)
-                .orElseThrow(()-> new UserException(UserErrorCode.NOT_FOUND));
-
-        return UserDTO.Response.of(foundUser);
-    }
-
-    @Override
-    public UserDTO.Response readByEmail(String email){
-        User foundUser =  userRepository.findByEmail(email)
-                .orElseThrow(()-> new UserException(UserErrorCode.NOT_FOUND));
+                .orElseThrow(UserNotFoundException::new);
 
         return UserDTO.Response.of(foundUser);
     }
