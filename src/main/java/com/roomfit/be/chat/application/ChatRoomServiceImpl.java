@@ -18,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRoomRepository chatRepository;
