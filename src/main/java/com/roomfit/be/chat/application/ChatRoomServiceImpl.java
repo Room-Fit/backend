@@ -4,9 +4,10 @@ import com.roomfit.be.chat.application.dto.ChatRoomDTO;
 import com.roomfit.be.chat.application.dto.MessageDTO;
 import com.roomfit.be.chat.domain.ChatRoom;
 import com.roomfit.be.chat.domain.ChatRoomType;
+import com.roomfit.be.chat.domain.Message;
 import com.roomfit.be.chat.infrastructure.ChatRoomRepository;
+import com.roomfit.be.global.response.PaginationResponse;
 import com.roomfit.be.global.event.EventPublisher;
-import com.roomfit.be.participation.application.ParticipationService;
 import com.roomfit.be.participation.application.event.JoinAsHostEvent;
 import com.roomfit.be.participation.application.event.JoinAsParticipantEvent;
 import lombok.RequiredArgsConstructor;
@@ -47,10 +48,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<MessageDTO.Response> readMessageByRoomId(Long roomId) {
-        return chatRepository.findMessagesByChatRoomId(roomId).stream()
+    public PaginationResponse<MessageDTO.Response> readMessageByRoomId(Long roomId, Long lastMessageId, int pageSize) {
+        PaginationResponse<Message> messages =  chatRepository.findMessagesByChatRoomIdPaginated(roomId, lastMessageId, pageSize);
+        List<MessageDTO.Response> messageDTOs = messages.getData().stream()
                 .map(MessageDTO.Response::of)
                 .toList();
+        return new PaginationResponse<>(messageDTOs, messages.getTotalCount(), messages.isHasNext());
     }
 
     @Override
