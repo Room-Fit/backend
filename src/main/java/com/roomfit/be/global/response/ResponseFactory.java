@@ -7,10 +7,16 @@ public class ResponseFactory {
         return new CommonResponse<>(true, message, data);
 
     }
-
     public static <T> CommonResponse<T> success(String message) {
         return success(null, message );
     }
+
+    public static <T> CommonResponseWithPagination<T> successWithPagination(T data, String message, PaginationMeta meta) {
+        return new CommonResponseWithPagination<>(true, message, data, meta);
+
+    }
+
+
     // 실패 응답
     public static CommonResponse<Void> failure(String message) {
         return new CommonResponse<>(false, message);
