@@ -6,6 +6,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity(name = "messages")
+@Table(
+        indexes = {
+                @Index(name = "idx_sender_id_chatroom_id_id", columnList = "chatroom_id, sender_id, id")
+        }
+)
 @Getter
 @Builder
 @NoArgsConstructor
@@ -40,6 +45,11 @@ public class Message extends BaseEntity {
 
     public void setSender(User sender) {
         this.sender = sender;
+    }
+
+
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
     public static Message create(Long senderId,  Long chatRoomId, String content) {
