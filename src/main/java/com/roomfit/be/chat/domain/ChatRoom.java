@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,14 +38,18 @@ public class ChatRoom extends BaseEntity {
 
     Integer maxQuota;
 
-    @Builder.Default
-    Integer currentQuota = DEFAULT_QUOTA;
-
     String dormitory;
 
 
-    @OneToMany()
-    List<Participation> participationList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom")
+    @Builder.Default
+    private List<Participation> participationList = new ArrayList<>();
+    public Integer getCurrentQuota() {
+        if(participationList != null){
+            return participationList.size();
+        }
+        return 0;
+    }
 
     public static ChatRoom createPrivateRoom(String name){
         return ChatRoom.builder()
