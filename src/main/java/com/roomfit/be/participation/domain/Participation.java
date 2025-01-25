@@ -30,18 +30,22 @@ public class Participation {
     private ParticipationType type;
 
     public static Participation participateAsHost(User user, ChatRoom chatRoom) {
-        return Participation.builder()
+        Participation participation = Participation.builder()
                 .user(user)
                 .chatRoom(chatRoom)
                 .type(ParticipationType.HOST)
                 .build();
+        chatRoom.getParticipationList().add(participation);
+        return participation;
     }
 
     public static Participation participateAsParticipant(User user, ChatRoom chatRoom) {
-        return Participation.builder()
+        Participation participation = Participation.builder()
                 .user(user)
                 .chatRoom(chatRoom)
                 .type(ParticipationType.PARTICIPANT)
                 .build();
+        chatRoom.getParticipationList().add(participation);
+        return participation;
     }
 }
