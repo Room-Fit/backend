@@ -3,9 +3,15 @@ package com.roomfit.be.chat.presentation;
 import com.roomfit.be.auth.application.dto.UserDetails;
 import com.roomfit.be.chat.application.ChatRoomService;
 import com.roomfit.be.chat.application.dto.ChatRoomDTO;
+import com.roomfit.be.chat.application.dto.MessageDTO;
+import com.roomfit.be.global.response.PaginationResponse;
 import com.roomfit.be.global.annontation.AuthCheck;
 import com.roomfit.be.global.response.CommonResponse;
+import com.roomfit.be.global.response.CommonResponseWithPagination;
+import com.roomfit.be.global.response.PaginationMeta;
 import com.roomfit.be.global.response.ResponseFactory;
+import com.roomfit.be.participation.application.ParticipationService;
+//import com.roomfit.be.participation.application.dto.ParticipantDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomController {
     private final ChatRoomService chatService;
-
+    private final ParticipationService participationService;
     /**
      * 채팅방 전체 조회
      */
@@ -33,6 +39,16 @@ public class ChatRoomController {
         List<ChatRoomDTO.Response> response = chatService.readAllChatRooms(type);
         return ResponseFactory.success(response, "채팅방 조회에 성공");
     }
+
+//    @Operation(summary = "채팅방 속한 사용자 조회하기", description = "채팅방에 속한 사용자를 조회 합니다.")
+//    @GetMapping("/{room_id}/participants")
+//    @ResponseStatus(HttpStatus.CREATED) // Explicit status code for success response
+//    public CommonResponse<List<ParticipantDTO>> readChatRoomDetailsById(
+//            @Parameter(description = "채팅방 ID", example = "1") @PathVariable("room_id") Long roomId
+//    ) {
+//        List<ParticipantDTO> response = participationService.readParticipantsInChatRoom(roomId);
+//        return ResponseFactory.success(response, "채팅방에 속한 사용자 조회 성공");
+//    }
 
     /**
      * 채팅방 생성
@@ -89,10 +105,13 @@ public class ChatRoomController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/{room_id}/messages")
     @ResponseStatus(HttpStatus.OK) // Explicit status code for success response
-    public CommonResponse<String> readMessagesByRoomId(
-            @Parameter(description = "채팅방 ID", example = "1") @PathVariable("room_id") Long roomId) {
+    public CommonResponseWithPagination<List<MessageDTO.Response>> readMessagesByRoomId(
+            @Parameter(description = "채팅방 ID", example = "1") @PathVariable("room_id") Long roomId,
+            @RequestParam(required = false) Long lastMessageId,
+            @RequestParam int pageSize) {
 
-        chatService.readMessageByRoomId(roomId);
-        return ResponseFactory.success("메시지 조회 성공");
+        PaginationResponse<MessageDTO.Response> messages = chatService.readMessageByRoomId(roomId, lastMessageId, pageSize);
+        PaginationMeta meta = PaginationMeta.of(messages.getTotalCount(), messages.isHasNext());
+        return ResponseFactory.successWithPagination(messages.getData(),"메시지 조회 성공", meta);
     }
 }
