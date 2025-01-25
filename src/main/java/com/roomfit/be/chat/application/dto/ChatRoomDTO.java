@@ -29,6 +29,8 @@ public class ChatRoomDTO {
                     .status(chatRoom.getStatus().name())
                     .maxQuota(chatRoom.getMaxQuota())
                     .currentQuota(chatRoom.getCurrentQuota())
+                    .dormitory(chatRoom.getDormitory())
+                    .description(chatRoom.getDescription())
                     .build();
         }
     }
