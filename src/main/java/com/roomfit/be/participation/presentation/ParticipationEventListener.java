@@ -17,13 +17,11 @@ public class ParticipationEventListener {
     private final ParticipationService participationService;
 
     @EventListener
-    @Async("taskExecutor")
     public void onJoinAsHostHandler(JoinAsHostEvent event){
         participationService.joinAsHost(event.getUserId(),  event.getChatRoomId());
     }
 
     @EventListener
-    @Async("taskExecutor")
     public void onJoinAsParticipantHandler(JoinAsParticipantEvent event){
         participationService.joinAsParticipant(event.getUserId(),  event.getChatRoomId());
     }
