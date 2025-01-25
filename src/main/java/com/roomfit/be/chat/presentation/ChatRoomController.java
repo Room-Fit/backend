@@ -11,7 +11,7 @@ import com.roomfit.be.global.response.CommonResponseWithPagination;
 import com.roomfit.be.global.response.PaginationMeta;
 import com.roomfit.be.global.response.ResponseFactory;
 import com.roomfit.be.participation.application.ParticipationService;
-//import com.roomfit.be.participation.application.dto.ParticipantDTO;
+import com.roomfit.be.participation.application.dto.ParticipantDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,15 +40,15 @@ public class ChatRoomController {
         return ResponseFactory.success(response, "채팅방 조회에 성공");
     }
 
-//    @Operation(summary = "채팅방 속한 사용자 조회하기", description = "채팅방에 속한 사용자를 조회 합니다.")
-//    @GetMapping("/{room_id}/participants")
-//    @ResponseStatus(HttpStatus.CREATED) // Explicit status code for success response
-//    public CommonResponse<List<ParticipantDTO>> readChatRoomDetailsById(
-//            @Parameter(description = "채팅방 ID", example = "1") @PathVariable("room_id") Long roomId
-//    ) {
-//        List<ParticipantDTO> response = participationService.readParticipantsInChatRoom(roomId);
-//        return ResponseFactory.success(response, "채팅방에 속한 사용자 조회 성공");
-//    }
+    @Operation(summary = "채팅방 속한 사용자 조회하기", description = "채팅방에 속한 사용자를 조회 합니다.")
+    @GetMapping("/{room_id}/participants")
+    @ResponseStatus(HttpStatus.CREATED) // Explicit status code for success response
+    public CommonResponse<List<ParticipantDTO>> readChatRoomDetailsById(
+            @Parameter(description = "채팅방 ID", example = "1") @PathVariable("room_id") Long roomId
+    ) {
+        List<ParticipantDTO> response = participationService.readParticipantsInChatRoom(roomId);
+        return ResponseFactory.success(response, "채팅방에 속한 사용자 조회 성공");
+    }
 
     /**
      * 채팅방 생성
