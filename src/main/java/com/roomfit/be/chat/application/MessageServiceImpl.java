@@ -1,5 +1,7 @@
 package com.roomfit.be.chat.application;
 
+import com.roomfit.be.chat.application.annotation.MessageCountProcessor;
+import com.roomfit.be.chat.application.annotation.ProcessType;
 import com.roomfit.be.chat.application.dto.MessageDTO;
 import com.roomfit.be.chat.domain.Message;
 import com.roomfit.be.chat.infrastructure.MessageRepository;
@@ -18,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageServiceImpl implements  MessageService{
     private final MessageRepository messageRepository;
+
+    @MessageCountProcessor(type = ProcessType.INCREASE)
     @Transactional
     @Override
     public MessageDTO.Response sendMessage(MessageDTO.Send request) {
