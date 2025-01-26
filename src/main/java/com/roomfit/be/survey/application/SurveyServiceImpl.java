@@ -85,7 +85,8 @@ public class SurveyServiceImpl implements  SurveyService{
      */
     @Override
     public QuestionnaireDTO.Response readReplyByUserId(Long id) {
-        Questionnaire foundQuestionnaire = surveyRepository.findAll().get(0);
+        Questionnaire foundQuestionnaire = surveyRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Rely not exist"));
         return QuestionnaireDTO.Response.ofWithReplies(foundQuestionnaire);
     }
 
