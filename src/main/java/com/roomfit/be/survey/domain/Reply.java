@@ -1,5 +1,6 @@
 package com.roomfit.be.survey.domain;
 
+import com.roomfit.be.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +17,17 @@ public class Reply {
     @Column(name = "reply_value")
     String value;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    User owner;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="question_id")
     Question question;
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
     public Reply(String label, String value) {
         this.label = label;
