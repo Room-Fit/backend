@@ -16,5 +16,5 @@ public interface SurveyRepository extends JpaRepository<Questionnaire, Long>, Qu
     /**
      * 가장 최근 설문지 -> Order by 로 인한 성능 저하 우려
      */
-        Optional<Questionnaire> findTopByOrderByCreatedAtDesc();
+    Optional<Questionnaire> findTopByOrderByCreatedAtDesc();
 }
