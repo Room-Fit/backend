@@ -55,5 +55,9 @@ public class QuestionnaireDTO {
                     .build();
 
         }
+
+        public void addQuestions(List<QuestionDTO.Response> questions) {
+            this.questions = questions;
+        }
     }
 }
