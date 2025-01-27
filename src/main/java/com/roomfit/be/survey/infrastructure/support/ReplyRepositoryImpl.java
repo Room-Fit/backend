@@ -14,8 +14,8 @@ import java.util.List;
 public class ReplyRepositoryImpl implements  ReplyRepository{
     private final JdbcTemplate jdbcTemplate;
     @Override
-    public void saveBulkReply(ReplyDTO.Create request) {
-        String sql = "INSERT INTO replies (reply_label, reply_value, question_id) VALUES (?, ?, ?)";
+    public void saveBulkReply(Long userId, ReplyDTO.Create request) {
+        String sql = "INSERT INTO replies (owner_id, reply_label, reply_value, question_id) VALUES (?, ?, ?, ?)";
         List<Object[]> optionParams = new ArrayList<>();
         for(ReplyDTO.QuestionReply questionReply :request.getQuestionReplies()){
             Long id = questionReply.getQuestionId();
@@ -23,6 +23,7 @@ public class ReplyRepositoryImpl implements  ReplyRepository{
             if(id != null){
                 replies.forEach(reply->{
                     optionParams.add(new Object[]{
+                            userId,
                             reply.getLabel(),
                             reply.getValue(),
                             id
