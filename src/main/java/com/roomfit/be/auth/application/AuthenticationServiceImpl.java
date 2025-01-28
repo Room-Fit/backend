@@ -7,7 +7,7 @@ import com.roomfit.be.auth.application.exception.TokenGenerationFailureException
 import com.roomfit.be.auth.domain.AuthToken;
 import com.roomfit.be.auth.domain.TokenType;
 import com.roomfit.be.auth.domain.jwt.JwtTokenProvider;
-import com.roomfit.be.auth.infrastructure.AuthTokenRepository;
+import com.roomfit.be.auth.infrastructure.AuthenticationRepository;
 import com.roomfit.be.user.application.exception.UserNotFoundException;
 import com.roomfit.be.user.domain.User;
 import com.roomfit.be.user.infrastructure.UserRepository;
@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final AuthTokenRepository authTokenRepository;
+    private final AuthenticationRepository authenticationRepository;
 
     @Override
     public AuthDTO.LoginResponse authenticate(AuthDTO.Login request) {
@@ -32,7 +33,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 foundUser.getId(),
                 foundUser.getEmail(),
                 foundUser.getNickname(),
-                foundUser.getRole().name()
+                foundUser.getRole().name(),
+                foundUser.getStage().name()
         );
         String accessToken = generateToken(userDetails, TokenType.ACCESS);
         String refreshToken = generateToken(userDetails, TokenType.REFRESH);
@@ -42,6 +44,39 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("User {} authenticated successfully.", foundUser.getEmail());
         return AuthDTO.LoginResponse.of(accessToken, refreshToken);
     }
+
+//    @Override
+//    public AuthDTO.LoginResponse reissueRefreshToken(String email,String refreshToken){
+////       Iterable<AuthToken> authToken = authenticationRepository.findAll();
+////       authToken.forEach(authToken1 -> {
+////           log.info(authToken1.getToken());
+////       });
+//       return null;
+////        assert authToken.isPresent();
+////       log.info(String.valueOf(authToken.get()));
+////       String storedRefreshToken = authToken.getToken();
+////       log.info(email, refreshToken );
+////       if(!storedRefreshToken.equals(refreshToken)){
+////           throw new RuntimeException();
+////       }
+////        User foundUser = findUserByEmail(email);
+////        UserDetails userDetails = UserDetails.of(
+////                foundUser.getId(),
+////                foundUser.getEmail(),
+////                foundUser.getNickname(),
+////                foundUser.getRole().name()
+////        );
+////        log.info(userDetails.toString());
+////
+////       String newRefreshToken = generateToken(userDetails,TokenType.REFRESH);
+////
+////       saveRefreshToken(email, newRefreshToken);
+////
+////       String accessToken = generateToken(userDetails, TokenType.ACCESS);
+////       return AuthDTO.LoginResponse.of(accessToken,refreshToken);
+////        return null;
+//    }
+
     private User findUserByEmailAndValidatePassword(String email, String inputPassword) {
         User foundUser = findUserByEmail(email);
         validatePassword(inputPassword, foundUser.getPassword());
@@ -82,7 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private void saveRefreshToken(String email, String refreshToken) {
         try {
             AuthToken authToken = AuthToken.of(email, refreshToken);
-            authTokenRepository.save(authToken);
+            authenticationRepository.save(authToken);
             log.info("Refresh token saved for user {}", email);
         } catch (DataAccessException e) {
             log.error("Error occurred while saving refresh token for user {}", email, e);
