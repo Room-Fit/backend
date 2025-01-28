@@ -52,4 +52,12 @@ public class UserServiceImpl implements UserService{
                 .map(UserDTO.Response::of)
                 .toList();
     }
+
+    @Override
+    public void completeSurvey(Long userId) {
+        User foundUser = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        foundUser.completeSurvey();
+        userRepository.save(foundUser);
+    }
 }

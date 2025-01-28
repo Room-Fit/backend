@@ -71,4 +71,8 @@ public class User extends BaseEntity {
     public static User createUser(String nickname, String email, String password, String birth, Integer studentId, String college, String gender){
         return new User(nickname, email, password, UserRole.DEFAULT, birth, studentId, college, Gender.valueOf(gender));
     }
+
+    public void completeSurvey() {
+        this.stage = SurveyStage.POST_SURVEY;
+    }
 }
