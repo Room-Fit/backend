@@ -8,6 +8,7 @@ import com.roomfit.be.survey.application.SurveyService;
 import com.roomfit.be.survey.application.dto.QuestionnaireDTO;
 import com.roomfit.be.survey.application.dto.ReplyDTO;
 import com.roomfit.be.survey.application.dto.SearchType;
+import com.roomfit.be.survey.presentation.annotation.SurveyStageCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -60,6 +61,7 @@ public class SurveyController {
     @PostMapping("/reply")
     @SecurityRequirement(name = "bearerAuth")
     @AuthCheck()
+    @SurveyStageCheck()
     @ResponseStatus(HttpStatus.CREATED)  // 201 상태 코드
     public CommonResponse<QuestionnaireDTO.Response> createReply(
             @Parameter(hidden = true)  UserDetails userDetails,
