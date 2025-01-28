@@ -35,6 +35,7 @@ public class JwtTokenProvider {
                 .claim("id", userDetails.getId())
                 .claim("nickname", userDetails.getNickname())
                 .claim("role", userDetails.getUserRole())
+                .claim("surveyStage", userDetails.getSurveyStage())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
@@ -49,6 +50,7 @@ public class JwtTokenProvider {
                 .email(claims.getSubject())
                 .nickname(claims.get("nickname", String.class))
                 .userRole(claims.get("role", String.class))
+                .surveyStage(claims.get("surveyStage", String.class))
                 .build();
     }
 }

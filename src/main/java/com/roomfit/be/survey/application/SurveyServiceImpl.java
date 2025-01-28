@@ -1,5 +1,6 @@
 package com.roomfit.be.survey.application;
 
+import com.roomfit.be.global.event.EventPublisher;
 import com.roomfit.be.survey.application.dto.QuestionDTO;
 import com.roomfit.be.survey.application.dto.QuestionnaireDTO;
 import com.roomfit.be.survey.application.dto.ReplyDTO;
@@ -11,6 +12,7 @@ import com.roomfit.be.survey.domain.Question;
 import com.roomfit.be.survey.domain.Questionnaire;
 import com.roomfit.be.survey.infrastructure.QuestionRepository;
 import com.roomfit.be.survey.infrastructure.SurveyRepository;
+import com.roomfit.be.user.application.event.CompleteSurveyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class SurveyServiceImpl implements  SurveyService{
+    private final EventPublisher publisher;
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
     private Object questionDTOs;
@@ -86,6 +89,7 @@ public class SurveyServiceImpl implements  SurveyService{
     public QuestionnaireDTO.Response createReply(Long userId, ReplyDTO.Create request) {
         try {
             surveyRepository.saveBulkReply(userId, request);
+            publisher.publish(new CompleteSurveyEvent(this,userId));
         }catch (Exception e){
             throw new ReplySaveFailureException();
         }
@@ -104,7 +108,7 @@ public class SurveyServiceImpl implements  SurveyService{
             throw new RuntimeException("설문 진행해주세요");
         }
         List<QuestionDTO.Response> questionDTOs =questions.stream()
-                        .map(QuestionDTO.Response::of)
+                        .map(QuestionDTO.Response::ofWithReplies)
                         .toList();
         log.info(questionDTOs.toString());
         questionnaireDTO.addQuestions(questionDTOs);

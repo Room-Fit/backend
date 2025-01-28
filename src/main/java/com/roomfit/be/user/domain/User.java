@@ -1,19 +1,19 @@
-    package com.roomfit.be.user.domain;
+package com.roomfit.be.user.domain;
 
-    import com.roomfit.be.global.entity.BaseEntity;
-    import com.roomfit.be.chat.domain.Message;
+import com.roomfit.be.global.entity.BaseEntity;
+import com.roomfit.be.chat.domain.Message;
 //    import com.roomfit.be.participation.domain.Participation;
-    import com.roomfit.be.participation.domain.Participation;
-    import jakarta.persistence.*;
-    import lombok.Getter;
-    import lombok.NoArgsConstructor;
-    import lombok.ToString;
+import com.roomfit.be.participation.domain.Participation;
+import com.roomfit.be.survey.domain.Reply;
+import jakarta.persistence.*;
+import lombok.*;
 
-    import java.util.List;
+import java.util.List;
 
 @Entity(name="users")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class User extends BaseEntity {
     @Id
@@ -22,8 +22,13 @@ public class User extends BaseEntity {
     private String nickname;
     private String email;
     private String password;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    private SurveyStage stage = SurveyStage.PRE_SURVEY;
+
     private String birth;
     private Integer studentId;
     private String college;
@@ -39,6 +44,8 @@ public class User extends BaseEntity {
     @ToString.Exclude
     private List<Message> messages;
 
+    @OneToMany()
+    List<Reply> replies;
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
@@ -63,5 +70,9 @@ public class User extends BaseEntity {
     }
     public static User createUser(String nickname, String email, String password, String birth, Integer studentId, String college, String gender){
         return new User(nickname, email, password, UserRole.DEFAULT, birth, studentId, college, Gender.valueOf(gender));
+    }
+
+    public void completeSurvey() {
+        this.stage = SurveyStage.POST_SURVEY;
     }
 }
