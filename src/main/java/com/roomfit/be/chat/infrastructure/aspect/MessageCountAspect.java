@@ -1,4 +1,4 @@
-    package com.roomfit.be.chat.infrastructure.aop;
+    package com.roomfit.be.chat.infrastructure.aspect;
 
     import com.roomfit.be.chat.application.dto.MessageDTO;
     import com.roomfit.be.chat.infrastructure.MessageRepository;

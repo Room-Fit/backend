@@ -14,4 +14,5 @@ public interface ChatRoomService {
 
     PaginationResponse<MessageDTO.Response>  readMessageByRoomId(Long roomId, Long lastMessageId, int pageSize);
     List<ChatRoomDTO.Response> readAllChatRooms(String type);
+    ChatRoomDTO.DetailsResponse readChatRoomDetails(Long roomId);
 }
