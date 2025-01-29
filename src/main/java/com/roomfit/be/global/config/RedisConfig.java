@@ -1,5 +1,6 @@
 package com.roomfit.be.global.config;
 
+import com.roomfit.be.auth.domain.AuthToken;
 import com.roomfit.be.auth.domain.VerificationCode;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,6 +51,20 @@ public class RedisConfig {
     public ReactiveRedisTemplate<String, VerificationCode> verificationCodeRedisTemplate(
             RedisConnectionFactory connectionFactory) {
         return reactiveRedisTemplate(connectionFactory, VerificationCode.class);
+    }
+
+    @Bean
+    @Qualifier("authTokenRedisTemplate")
+    public RedisTemplate<String, AuthToken> AuthTokenRedisTemplate(
+            RedisConnectionFactory connectionFactory) {
+
+        RedisTemplate<String, AuthToken> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(AuthToken.class));
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(AuthToken.class));
+        return template;
     }
 
     @Bean
