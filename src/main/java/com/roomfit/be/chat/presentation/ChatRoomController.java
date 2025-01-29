@@ -26,7 +26,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomController {
     private final ChatRoomService chatService;
-    private final ParticipationService participationService;
     /**
      * 채팅방 전체 조회
      */
@@ -43,10 +42,10 @@ public class ChatRoomController {
     @Operation(summary = "채팅방 속한 사용자 조회하기", description = "채팅방에 속한 사용자를 조회 합니다.")
     @GetMapping("/{room_id}/participants")
     @ResponseStatus(HttpStatus.CREATED) // Explicit status code for success response
-    public CommonResponse<List<ParticipantDTO>> readChatRoomDetailsById(
+    public CommonResponse<ChatRoomDTO.DetailsResponse> readChatRoomDetailsById(
             @Parameter(description = "채팅방 ID", example = "1") @PathVariable("room_id") Long roomId
     ) {
-        List<ParticipantDTO> response = participationService.readParticipantsInChatRoom(roomId);
+        ChatRoomDTO.DetailsResponse response =chatService.readChatRoomDetails(roomId);
         return ResponseFactory.success(response, "채팅방에 속한 사용자 조회 성공");
     }
 
