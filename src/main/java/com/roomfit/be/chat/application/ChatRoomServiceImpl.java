@@ -8,6 +8,8 @@ import com.roomfit.be.chat.domain.Message;
 import com.roomfit.be.chat.infrastructure.ChatRoomRepository;
 import com.roomfit.be.global.response.PaginationResponse;
 import com.roomfit.be.global.event.EventPublisher;
+import com.roomfit.be.participation.application.ParticipationService;
+import com.roomfit.be.participation.application.dto.ParticipantDTO;
 import com.roomfit.be.participation.application.event.JoinAsHostEvent;
 import com.roomfit.be.participation.application.event.JoinAsParticipantEvent;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRoomRepository chatRepository;
+    private final ParticipationService participationService;
     private final EventPublisher eventPublisher;
     @Override
     public ChatRoomDTO.Response createRoom(Long userId, ChatRoomDTO.Create request) {
@@ -65,6 +68,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .toList();
     }
 
+    public ChatRoomDTO.DetailsResponse readChatRoomDetails(Long roomId){
+        ChatRoom chatRoom = chatRepository.findById(roomId)
+                .orElseThrow();
+        List<ParticipantDTO> participants = participationService.readParticipantsInChatRoom(roomId);
+
+        return ChatRoomDTO.DetailsResponse.of(chatRoom, participants);
+    }
     private ChatRoom createGroupRoom(ChatRoomDTO.Create request){
         return ChatRoom.createGroupRoom(request.getName(), request.getDescription(), request.getDormitory(), request.getMaxQuota());
     }
