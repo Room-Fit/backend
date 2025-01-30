@@ -6,5 +6,6 @@ public interface AuthService {
     void generateVerificationCode(String sessionId, String email);
     boolean verifyVerificationCode(String sessionId, String code);
     AuthDTO.LoginResponse authenticate(AuthDTO.Login request);
+    AuthDTO.LoginResponse reissueRefreshToken(AuthDTO.Reissue request);
     boolean checkEmailVerificationStatus(String authToken);
 }

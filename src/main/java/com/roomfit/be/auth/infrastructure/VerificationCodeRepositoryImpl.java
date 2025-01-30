@@ -13,14 +13,14 @@ import java.util.Optional;
 
 @Repository
 @Slf4j
-public class VerificationRepositoryImpl implements VerificationRepository{
+public class VerificationCodeRepositoryImpl implements VerificationCodeRepository {
     private final static String  VERIFICATION_CODE_HASH_NAME = "verification_code";
     private final ReactiveRedisTemplate<String, VerificationCode> reactiveRedisTemplate;
     private final ReactiveHashOperations<String, String, VerificationCode> hashOperations;
 
 
     @Autowired
-    public VerificationRepositoryImpl(@Qualifier("verificationCodeRedisTemplate") ReactiveRedisTemplate<String, VerificationCode>reactiveRedisTemplate) {
+    public VerificationCodeRepositoryImpl(@Qualifier("verificationCodeRedisTemplate") ReactiveRedisTemplate<String, VerificationCode>reactiveRedisTemplate) {
         this.reactiveRedisTemplate =  reactiveRedisTemplate;
         this.hashOperations = reactiveRedisTemplate.opsForHash();
     }

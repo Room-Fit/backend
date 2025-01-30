@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AuthServiceImpl implements AuthService{
     private final AuthenticationService authenticationService;
-    private final VerificationService verificationService;
+    private final VerificationCodeService verificationCodeService;
 
     @Override
     public AuthDTO.LoginResponse authenticate(AuthDTO.Login request) {
@@ -19,18 +19,23 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
+    public AuthDTO.LoginResponse reissueRefreshToken(AuthDTO.Reissue request) {
+        return authenticationService.reissueRefreshToken(request.getEmail(), request.getRefreshToken());
+    }
+
+    @Override
     public boolean checkEmailVerificationStatus(String authToken) {
-        return verificationService.getStatus(authToken);
+        return verificationCodeService.getStatus(authToken);
     }
 
     @Async("taskExecutor")
     @Override
     public void generateVerificationCode(String authToken, String email) {
-        verificationService.generateVerificationCode(authToken, email);
+        verificationCodeService.generateVerificationCode(authToken, email);
     }
 
     @Override
     public boolean verifyVerificationCode(String authToken, String code) {
-        return verificationService.verifyVerificationCode(authToken, code);
+        return verificationCodeService.verifyVerificationCode(authToken, code);
     }
 }

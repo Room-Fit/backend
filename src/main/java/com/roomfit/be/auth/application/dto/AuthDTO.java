@@ -15,6 +15,16 @@ public class AuthDTO {
         String email;
         String password;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Reissue{
+        String email;
+        String refreshToken;
+    }
+
     @Data
     @Builder
     @AllArgsConstructor
