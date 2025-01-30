@@ -37,6 +37,21 @@ public class AuthController {
     }
 
     /**
+     * 토큰 재발급
+     */
+    @Operation(
+            summary = "토큰 재발급",
+            description = "토큰 재발급을 처리합니다."
+    )
+    @PostMapping("/refresh")
+    @ResponseStatus(HttpStatus.OK)  // Simplified status code handling with @ResponseStatus
+    public CommonResponse<AuthDTO.LoginResponse> refreshToken(
+            @RequestBody @Parameter(description = "이메일") AuthDTO.Reissue request) {
+        AuthDTO.LoginResponse response = authService.reissueRefreshToken(request);
+        return ResponseFactory.success(response, "토큰 재발급 성공");
+    }
+
+    /**
      * 인증 코드 전송
      */
     @Operation(
