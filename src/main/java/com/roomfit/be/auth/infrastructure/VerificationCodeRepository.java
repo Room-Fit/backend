@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-public interface VerificationRepository {
+public interface VerificationCodeRepository {
 
     Optional<VerificationCode> findByUUid(String uuid);
     Mono<VerificationCode> save(VerificationCode verificationCode);
