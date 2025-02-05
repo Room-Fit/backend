@@ -34,22 +34,22 @@ public class UserDTO {
         private String nickname;
         private String email;
         private String role;
-        private String password;
         private String birth;
         private Integer studentId;
         private String college;
         private String gender;
+        private boolean isSurveyComplete;
         public static Response of(User user) {
             return Response.builder()
                     .id(user.getId())
                     .nickname(user.getNickname())
                     .email(user.getEmail())
                     .role(user.getRole().name())
-                    .password(user.getPassword())
                     .birth(user.getBirth())
                     .studentId(user.getStudentId())
                     .college(user.getCollege())
                     .gender(user.getGender().name())
+                    .isSurveyComplete(user.isSurveyComplete())
                     .build();
         }
     }
