@@ -75,4 +75,8 @@ public class User extends BaseEntity {
     public void completeSurvey() {
         this.stage = SurveyStage.POST_SURVEY;
     }
+
+    public boolean isSurveyComplete() {
+        return this.stage.name().equals(SurveyStage.POST_SURVEY.name());
+    }
 }
